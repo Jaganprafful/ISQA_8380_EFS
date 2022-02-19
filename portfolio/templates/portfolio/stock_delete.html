@@ -1,0 +1,9 @@
+ {% block body_block %}
+    <h1>Delete {{ stock.name }}?</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value="Delete">
+        <a href="{% url 'portfolio:home' pk=stock.customer %} ">Cancel</a>
+    </form>
+{% endblock %}
