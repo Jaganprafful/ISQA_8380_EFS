@@ -1,3 +1,4 @@
+import requests
 from django.db import models
 
 from django.utils import timezone
@@ -70,3 +71,33 @@ class Stock(models.Model):
 
     def initial_stock_value(self):
         return self.shares * self.purchase_price
+
+    def current_stock_price(self):
+        symbol_f = str(self.symbol)
+        print(symbol_f)
+        main_api = 'http://api.marketstack.com/v1/eod?'
+        api_key = 'access_key=af4fd4ab7af294adb099895ed50f9f1f&limit=1&symbols='
+        url = main_api + api_key + symbol_f
+        json_data = requests.get(url).json()
+        if not json_data: raise Exception
+        open_price = float(json_data['data'][0]['open'])
+        share_value = open_price
+        return share_value
+
+    def current_stock_value(self):
+        return float(self.current_stock_price()) * float(self.shares)
+
+
+class MutualFund(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='mutualfund')
+    plan = models.CharField(max_length=50)
+    investment_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    current_value = models.DecimalField(max_digits=10, decimal_places=2)
+    acquired_date = models.DateField(default=timezone.now, blank=True, null=True)
+
+    def created(self):
+        self.acquired_date = timezone.now()
+        self.save()
+
+    def __str__(self):
+        return str(self.customer)

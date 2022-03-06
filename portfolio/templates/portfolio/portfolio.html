@@ -1,0 +1,243 @@
+{% extends 'portfolio/base.html' %}
+{% load mathfilters %}
+{% load humanize %}
+{% block content %}
+
+    <html>
+            <head>
+                <meta charset="UTF-8">
+                <title>Eagle Financial</title>
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<script>
+
+    jQuery(document).ready(function(){
+    jQuery('#showChart').on('click', function(event) {
+        jQuery('#chart').toggle('show');
+    });
+});
+         function loadInfo (){
+             debugger;
+            var initialInvest = parseFloat(document.getElementById("initialInvest").value);
+            var  recentInvest = parseFloat(document.getElementById("recentInvest").value);
+            var initialStock = parseFloat(document.getElementById("initialStock").value);
+            var recentStock = parseFloat(document.getElementById("recentStock").value);
+            var total = initialInvest + recentInvest + initialStock+recentStock;
+            var initialInvestP = Math.round((initialInvest / total) * 100);
+            var recentInvestP = Math.round((recentInvest / total) * 100);
+            var initialStockP = Math.round((initialStock / total) * 100);
+            var recentStockP = Math.round((recentStock / total) * 100);
+
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Total Initial Investment ' + initialInvestP + '%', 'Total Recent Investment ' + recentInvestP + '%', 'Total Initial Stocks  ' + initialStockP + '%', 'Total Recent Stocks ' + recentStockP + '%'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [initialInvestP, recentInvestP, initialStockP, recentStockP],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 120, 50, 1)',
+
+
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 120, 50, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+
+            });
+        }
+
+</script>
+            </head>
+             
+            <body>
+                     <div class="container">
+                                <div class="row">
+                                    <div class="col-md-10 col-md-offset-1">
+                                        <div class="panel panel-primary">
+                                            <div class="panel-heading">Welcome!</div>
+                                            <div class="panel-body">
+                                                Eagle Financial Services, your Midwest Financial Services Partner.
+                                            </div>
+                                        </div>
+                                    </div>
+                               </div>
+
+<div class="row">
+    <h1 style="padding-left: 15Px">Customer Portfolio</h1>
+</div>
+                     <div class="row">
+
+    <h2 style="padding-left: 15Px">Overall Portfolio Performance</h2>
+
+    <button id="showChart" type="submit" class="btn btn-primary" onclick="loadInfo()" style="float:right">Show Chart</button>
+        <div id="chart" style="height: 400px; width: 400px; display: none" >
+            <canvas id="myChart"></canvas>
+        </div>
+                     </div>
+                         <div class="row">
+                         <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr class="bg-info">
+
+            <th>Portfolio Initial Investments</th>
+            <th>Portfolio Current Investments</th>
+            <th>Grand Total Result (USD)</th>
+            <th>Grand Total Results (EUR)</th>
+            <th>USD to EUR Conv Rate</th>
+
+        </tr>
+        </thead>
+        <tbody>
+         <tr>
+                <td>{{ sum_acquired_value.acquired_value__sum |add:sum_of_initial_stock_value|intcomma}}</td>
+                <td>{{ sum_recent_value.recent_value__sum|add:sum_current_stocks_value|intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum |add:sum_current_stocks_value | sub:sum_of_initial_stock_value|intcomma}}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum |add:sum_current_stocks_value | sub:sum_of_initial_stock_value |mul:eur_rate|intcomma}}</td>
+                <td>{{ eur_rate }}</td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <h2 style="padding-left: 15Px">Stocks Information</h2>
+</div>
+<div class="row">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr class="bg-info">
+            <th>Customer</th>
+            <th>Symbol</th>
+            <th>Name</th>
+            <th>Shares</th>
+            <th>Initial Stock Price</th>
+            <th>Initial Stock Value</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for stock in stocks %}
+            <tr>
+                <td>{{ stock.customer }}</td>
+                <td>{{ stock.symbol }}</td>
+                <td>{{ stock.name }}</td>
+                <td>{{ stock.shares|intcomma }}</td>
+                <td>{{ stock.purchase_price|intcomma }}</td>
+                <td>{{ stock.initial_stock_value|intcomma}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+<div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr class="bg-info">
+
+            <th>Total of Initial Stocks</th>
+            <th>Total of Current Stocks</th>
+            <th>Results (USD)</th>
+            <th>Results (EUR)</th>
+
+        </tr>
+        </thead>
+        <tbody>
+         <tr>
+             <input type="hidden" id="initialStock" value="{{ sum_of_initial_stock_value }}"/>
+             <input type="hidden" id="recentStock" value="{{  sum_current_stocks_value }}"/>
+                <td>{{ sum_of_initial_stock_value|intcomma}}</td>
+                <td>{{ sum_current_stocks_value|intcomma}}</td>
+                <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value|intcomma}}</td>
+             <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value|mul:eur_rate|intcomma}}</td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+</div>
+    <div class="row">
+    <h2 style="padding-left: 15Px">Investments Information</h2>
+</div>
+<div class="row">
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr class="bg-info">
+
+            <th>Cust ID</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Acquired Value</th>
+            <th>Acquired Date</th>
+            <th>Recent Value</th>
+            <th>Recent Date</th>
+            <th>Results</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for investment in investments %}
+            <tr>
+                <td>{{ investment.customer }}</td>
+                <td>{{ investment.category }}</td>
+                <td>{{investment.description}}</td>
+                <td>{{investment.acquired_value|intcomma}}</td>
+                <td>{{investment.acquired_date}}</td>
+                <td>{{investment.recent_value|intcomma}}</td>
+                <td>{{investment.recent_date}}</td>
+                <td>{{investment.results_by_investment|intcomma}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+<div>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr class="bg-info">
+
+            <th>Total of Initial Investments</th>
+            <th>Total of Current Investments</th>
+            <th>Results (USD)</th>
+            <th>Results (EUR)</th>
+
+        </tr>
+        </thead>
+        <tbody>
+         <tr>
+             <input type="hidden" id="initialInvest" value="{{ sum_acquired_value.acquired_value__sum }}"/>
+             <input type="hidden" id="recentInvest" value="{{ sum_recent_value.recent_value__sum }}"/>
+                <td>{{ sum_acquired_value.acquired_value__sum|intcomma}}</td>
+                <td>{{ sum_recent_value.recent_value__sum|intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum|intcomma}}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum|mul:eur_rate|intcomma}}</td>
+
+
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+</div>
+                     <div class="row">
+                         <td><a href="{% url 'portfolio:portfolio_pdf' pk=customer.pk %}"
+                   class="btn btn-primary">Export to PDF Report</a>
+                     </div>
+                     </div>
+            </body>
+    </html>
+{% endblock %}

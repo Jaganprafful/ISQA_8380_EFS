@@ -1,5 +1,6 @@
-
 from django.conf.urls import url
+from rest_framework.urlpatterns import format_suffix_patterns
+
 from . import views
 from django.urls import path
 
@@ -10,6 +11,7 @@ urlpatterns = [
     path('customer_list', views.customer_list, name='customer_list'),
     path('customer/<int:pk>/edit/', views.customer_edit, name='customer_edit'),
     path('customer/<int:pk>/delete/', views.customer_delete, name='customer_delete'),
+    path('customer/create/', views.customer_new, name='customer_new'),
     path('stock_list', views.stock_list, name='stock_list'),
     path('stock/create/', views.stock_new, name='stock_new'),
     path('stock/<int:pk>/edit/', views.stock_edit, name='stock_edit'),
@@ -18,6 +20,15 @@ urlpatterns = [
     path('investment/create/', views.investment_new, name='investment_new'),
     path('investment/<int:pk>/edit/', views.investment_edit, name='investment_edit'),
     path('investment/<int:pk>/delete/', views.investment_delete, name='investment_delete'),
-
+    path('customer/<int:pk>/portfolio/', views.portfolio, name='portfolio'),
+    path('mutualfunds', views.mutual_fund_list, name='mutual_fund_list'),
+    path('mutualfund/<int:pk>/delete/', views.mutual_fund_delete, name='mutual_fund_delete'),
+    path('mutualfund/<int:pk>/edit/', views.mutual_fund_edit, name='mutual_fund_edit'),
+    path('mutualfund/create/', views.mutual_fund_new, name='mutual_fund_new'),
+    url(r'^customers_json/', views.CustomerList.as_view()),
+    path('customer/<int:pk>/portfolio/portfolio_pdf/', views.portfolio_pdf, name='portfolio_pdf'),
+    path('viewstock/<int:pk>/Stat', views.fetch_stock_info, name='stock_stat')
 
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
