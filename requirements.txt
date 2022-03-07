@@ -9,6 +9,6 @@ whitenoise
 xhtml2pdf~=0.2.5
 reportlab==3.6.6
 yfinance
-psycopg2-binary==2.8.6
+psycopg2==2.8.6
 django-heroku
 
