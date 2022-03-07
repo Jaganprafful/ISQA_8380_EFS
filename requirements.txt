@@ -5,7 +5,7 @@ django-mathfilters==1.0.0
 djangorestframework==3.11.0
 gunicorn
 requests
-
+whitenoise
 xhtml2pdf~=0.2.5
 reportlab==3.6.6
 yfinance
