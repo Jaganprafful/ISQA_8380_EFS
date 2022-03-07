@@ -75,7 +75,7 @@ class Stock(models.Model):
     def current_stock_price(self):
         symbol_f = str(self.symbol)
         main_api = 'http://api.marketstack.com/v1/eod?'
-        api_key = 'access_key=aa12a62ad5d6fbc7f445e0725ab69b42&limit=1&symbols='
+        api_key = 'access_key=9af3a49336c0e7f2636af698a165e5d6&limit=1&symbols='
         url = main_api + api_key + symbol_f
         json_data = requests.get(url).json()
         if not json_data: raise Exception

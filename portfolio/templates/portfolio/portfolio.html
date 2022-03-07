@@ -124,6 +124,9 @@
             <th>Shares</th>
             <th>Initial Stock Price</th>
             <th>Initial Stock Value</th>
+            <th>Current Stock Price</th>
+            <th>Current Stock Value</th>
+            <th>Results</th>
 
         </tr>
         </thead>
@@ -136,6 +139,9 @@
                 <td>{{ stock.shares|intcomma }}</td>
                 <td>{{ stock.purchase_price|floatformat:2|intcomma}}</td>
                 <td>{{ stock.initial_stock_value|floatformat:2|intcomma }}</td>
+                <td>{{ stock.current_stock_price|floatformat:2|intcomma}}</td>
+                <td>{{ stock.current_stock_value|floatformat:2|intcomma}}</td>
+                <td>{{ stock.current_stock_value|sub:stock.initial_stock_value|floatformat:2|intcomma}}</td>
             </tr>
         {% endfor %}
         </tbody>
