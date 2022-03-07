@@ -99,10 +99,10 @@
         </thead>
         <tbody>
          <tr>
-                <td>{{ sum_acquired_value.acquired_value__sum |add:sum_of_initial_stock_value|intcomma}}</td>
-                <td>{{ sum_recent_value.recent_value__sum|add:sum_current_stocks_value|intcomma }}</td>
-                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum |add:sum_current_stocks_value | sub:sum_of_initial_stock_value|intcomma}}</td>
-                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum |add:sum_current_stocks_value | sub:sum_of_initial_stock_value |mul:eur_rate|intcomma}}</td>
+                <td>{{ sum_acquired_value.acquired_value__sum |add:sum_of_initial_stock_value|floatformat:2|intcomma}}</td>
+                <td>{{ sum_recent_value.recent_value__sum|add:sum_current_stocks_value|floatformat:2|intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum |add:sum_current_stocks_value | sub:sum_of_initial_stock_value|floatformat:2|intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum |add:sum_current_stocks_value | sub:sum_of_initial_stock_value |mul:eur_rate|floatformat:2|intcomma}}</td>
                 <td>{{ eur_rate }}</td>
 
             </tr>
@@ -134,8 +134,8 @@
                 <td>{{ stock.symbol }}</td>
                 <td>{{ stock.name }}</td>
                 <td>{{ stock.shares|intcomma }}</td>
-                <td>{{ stock.purchase_price|intcomma }}</td>
-                <td>{{ stock.initial_stock_value|intcomma}}</td>
+                <td>{{ stock.purchase_price|floatformat:2|intcomma}}</td>
+                <td>{{ stock.initial_stock_value|floatformat:2|intcomma }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -156,10 +156,10 @@
          <tr>
              <input type="hidden" id="initialStock" value="{{ sum_of_initial_stock_value }}"/>
              <input type="hidden" id="recentStock" value="{{  sum_current_stocks_value }}"/>
-                <td>{{ sum_of_initial_stock_value|intcomma}}</td>
-                <td>{{ sum_current_stocks_value|intcomma}}</td>
-                <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value|intcomma}}</td>
-             <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value|mul:eur_rate|intcomma}}</td>
+                <td>{{ sum_of_initial_stock_value|floatformat:2|intcomma}}</td>
+                <td>{{ sum_current_stocks_value|floatformat:2|intcomma}}</td>
+                <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value|floatformat:2|intcomma}}</td>
+             <td>{{ sum_current_stocks_value | sub:sum_of_initial_stock_value|mul:eur_rate|floatformat:2|intcomma}}</td>
 
             </tr>
 
@@ -221,10 +221,10 @@
          <tr>
              <input type="hidden" id="initialInvest" value="{{ sum_acquired_value.acquired_value__sum }}"/>
              <input type="hidden" id="recentInvest" value="{{ sum_recent_value.recent_value__sum }}"/>
-                <td>{{ sum_acquired_value.acquired_value__sum|intcomma}}</td>
-                <td>{{ sum_recent_value.recent_value__sum|intcomma }}</td>
-                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum|intcomma}}</td>
-                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum|mul:eur_rate|intcomma}}</td>
+                <td>{{ sum_acquired_value.acquired_value__sum|floatformat:2|intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum|floatformat:2|intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum|floatformat:2|intcomma }}</td>
+                <td>{{ sum_recent_value.recent_value__sum | sub:sum_acquired_value.acquired_value__sum|mul:eur_rate|floatformat:2|intcomma }}</td>
 
 
             </tr>

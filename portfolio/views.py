@@ -14,6 +14,8 @@ from .models import *
 from .forms import *
 from .serializers import CustomerSerializer
 import yfinance as yf
+from utils import *
+
 
 now = timezone.now()
 
