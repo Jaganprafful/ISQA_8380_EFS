@@ -79,12 +79,19 @@ WSGI_APPLICATION = 'EFS.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'dgb',
+#         'USER': 'postgres',
+#         'PASSWORD': 'gounomavs1a'
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'dgb',
-        'USER': 'postgres',
-        'PASSWORD': 'gounomavs1a'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
