@@ -5,6 +5,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template.loader import get_template
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from io import BytesIO
@@ -212,7 +213,7 @@ def fetch_stock_info(request, pk):
     stock = get_object_or_404(Stock, pk=pk)
     symbol = stock.symbol
 
-    data_df = yf.download(symbol, start=now-timedelta(days=30), end=now)
+    data_df = yf.download(symbol, start=now - timedelta(days=30), end=now)
 
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename={}_StockInfo.csv'.format(symbol)
@@ -223,16 +224,22 @@ def fetch_stock_info(request, pk):
 # List at the end of the views.py
 # Lists all customers
 class CustomerList(APIView):
-    def get(self, request, id=None):
-        if id:
-            customer = Customer.objects.get(id=id)
-            serializer = CustomerSerializer(customer)
+    def get(self, request, *args, **kwargs):
+        try:
+            cust_num = request.query_params["cust_num"]
+            if cust_num:
+                if not Customer.objects.filter(cust_number=cust_num).exists():
+                    return Response(
+                        {"res": "Object with customer_number does not exists"},
+                        status=status.HTTP_400_BAD_REQUEST)
+                customer = Customer.objects.get(cust_number=cust_num)
+                serializer = CustomerSerializer(customer)
+                return Response(serializer.data)
+
+        except:
+            customers_json = Customer.objects.all()
+            serializer = CustomerSerializer(customers_json, many=True)
             return Response(serializer.data)
-
-        customers_json = Customer.objects.all()
-        serializer = CustomerSerializer(customers_json, many=True)
-        return Response(serializer.data)
-
 
 
 
