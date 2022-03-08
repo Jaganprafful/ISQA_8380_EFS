@@ -223,8 +223,12 @@ def fetch_stock_info(request, pk):
 # List at the end of the views.py
 # Lists all customers
 class CustomerList(APIView):
+    def get(self, request, id=None):
+        if id:
+            customer = Customer.objects.get(id=id)
+            serializer = CustomerSerializer(customer)
+            return Response(serializer.data)
 
-    def get(self, request):
         customers_json = Customer.objects.all()
         serializer = CustomerSerializer(customers_json, many=True)
         return Response(serializer.data)

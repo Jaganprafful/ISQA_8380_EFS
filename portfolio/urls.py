@@ -26,6 +26,7 @@ urlpatterns = [
     path('mutualfund/<int:pk>/edit/', views.mutual_fund_edit, name='mutual_fund_edit'),
     path('mutualfund/create/', views.mutual_fund_new, name='mutual_fund_new'),
     url(r'^customers_json/', views.CustomerList.as_view()),
+    path('customers_json/<int:id>', views.CustomerList.as_view()),
     path('customer/<int:pk>/portfolio/portfolio_pdf/', views.portfolio_pdf, name='portfolio_pdf'),
     path('viewstock/<int:pk>/Stat', views.fetch_stock_info, name='stock_stat')
 
